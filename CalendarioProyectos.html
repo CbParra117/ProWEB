@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- mobile metas -->
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="viewport" content="initial-scale=1, maximum-scale=1">
+    <meta charset="UTF-8">
+    <title>Calendario web</title>
+    <link rel="styleshhet" herf="https://maxcdn.bootstrapcdn.com/bootsrap/4.0.0/css/bootstrap.min.css" >
+    <script src="js/jquery.min.js"></script>
+    <script src="js/moment.min.js"></script>
+    <link rel="stylesheet" href="css/fullcalendar.min.css" >
+    <script src="js/fullcalendar.min.js"></script>
+    <link rel="stylesheet" href="css/estilos.css">
+    <script href="js/es.js"></script>
+    <link rel="stylesheet" href="css/style.css">
+    <link href="css/bootstrap/bootstrap.css" rel="stylesheet">
+    <link href="css/fontawesome-free-5.11.2-web/css/all.css" rel="stylesheet">
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" ></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" ></script>
+
+</head>
+<body class="main-layout">
+<!-- loader  -->
+<div class="loader_bg">
+    <div class="loader"><img src="img/logo-gris.png" alt="#"/><img src="images/loading.gif" alt="#" /></div>
+
+</div>
+<!-- end loader -->
+<header >
+    <!-- header inner -->
+    <section class="wrapper">
+
+
+
+        <div class="col-12 col-md-12 col-lg-12 menu-j">
+            <nav class="navbar navbar-expand-lg navbar-light">
+                <a class="navbar-brand" href="#"></a>
+                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="fa fa-bars" style="color: white;"></span>
+                </button>
+
+                <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                    <ul class="navbar-nav mr-auto">
+                        <li class="nav-item">
+                            <a class="nav-link navegacion margen-j" href="index.html"><i class="fas fa-home fa-fw" aria-hidden="true"></i> INICIO</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link navegacion margen-j" href="ListadeCursos.html"><i class="fas fa-tv"></i> CURSOS</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link navegacion margen-j" href="CalendarioProyectos.html"><i class="fas fa-book" arial-hidden="true" ></i> PROYECTOS ESCOLARES</a>
+                        </li>
+
+                        <li class="nav-item">
+                            <a class="nav-link navegacion margen-j" href="Seciones/CategoryInfo/Secciones/Registro1.php"><i class="fas fa-phone-square-alt"></i> CONTACTO</a>
+                        </li>
+                    </ul>
+                </div>
+            </nav>
+        </div>
+    </section>
+</header>
+<div class="head-top centrar">
+    <div class="row">
+        <div class="contenido justify-content-center">
+            <div class="col-12 col-md-12 col-lg-12 centrar">
+
+                <a href=""><img  class="logo-j centrar" src="img/LOGO-COLOR.png"></a>
+            </div>
+        </div>
+    </div>
+</div>
+<section class="contenido">
+<div class="container">
+    <div class="row">
+        <div class="col"></div>
+        <div class="col-7"></div> <div id="CalendarioWeb"></div>
+        <div class="col"></div>
+
+    </div>
+</div>
+<script>
+    $(document).ready(function(){
+        $('#CalendarioWeb').fullCalendar({
+
+            header:{
+                left:'today, prev,next,',
+                center:'title',
+                right:'month,basicWeek,basicDay ,agendaWeek, agendaDay'
+            },
+            dayClick:function(date,jsEvent,view){
+                $('#txtFecha').val(date.format());
+                $(" #ModalEventos ").modal();
+            },
+            events: 'http://localhost:80/ProWEB/eventos.php',
+
+            eventClick:function (calEvent,jsEvent,view) {
+                //h2
+                $('#tituloEvento').html(calEvent,title);
+                //muestra la informacion del  evento en los inputs
+                $('#txtDescripcion').val(calEvent,descripcion);
+                $('#txtID').val(calEvent,id);
+                $('#txtTitulo').val(calEvent,title);
+                $('#txtColor').val(calEvent,color);
+
+                FechaHora= calEvent.start._i.split(" ");
+                $('#txtFecha').val(FechaHora[0]);
+                $('#txtHora').val(FechaHora[1]);
+
+
+                $("#exampleEventos").modal();
+
+            }
+        });
+
+    });
+</script>
+</section>
+<!-- Modal 1(agregar  modificar  elminar) -->
+<div class="modal fade" id="ModalEventos" tabindex="-1" role="dialog"
+     aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="col-12 col-md-12 col-lg-12 titulo">
+                  <h5 class="modal-title h4" id="tituloEvento"></h5>
+                </div>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                Id:<input type="text" id="txtID" name="txtID">
+                Fecha:<input type="date" id="txtFecha" name="txtFecha"/><br/>
+                Titulo:<input type="text" id="txtTitulo" /><br/>
+                Hora:<input type="time" id="txtHora" value="10:30" /><br/>
+                Descripcion <textarea id="txtDescripcion" rows="3"></textarea><br/>
+                color:<input type="color" value="#ff0000" id="txtColor"><br/>
+            </div>
+            <div class="modal-footer">
+
+                <button type="button" id="btnAgregar" class="btn btn-success" >Agregar</button>
+                <button type="button" class="btn btn-success" >Modificar</button>
+                <button type="button" class="btn btn-danger ">Borrar</button>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+      var NuevoEvento;
+        $('#btnAgregar').click(function() {
+            RecolectarDatosGUI();
+            Enviarinformacion('agregar'.NuevoEvento);
+    });
+     function RecolectarDatosGUI(){
+          NuevoEvento= {
+             id:$('#txtID').val(),
+             title:$('#txtTitulo').val(),
+             start:$('#txtFecha').val()+" "+$('#txtHora').val(),
+             color:$('#txtColor').val(),
+             descripcion:$('#txtDescripcion').val(),
+             textColor: "#ffffff",
+             end:$('#txtFecha').val()+" "+$('#txtHora').val()
+         };
+     }
+     function Enviarinformacion(accion,objEvento){
+
+         $.ajax(
+             {
+                type:'POST',
+                url: 'eventos.php>?accion='+accion,
+                data:objEvento,
+                 success:function (msg)
+                 {
+                    if(msq) {
+                        $('#CalendarioWeb').fullCalendar('refetchEvents');
+                        $(" #ModalEventos ").modal('toggle');
+                        error.function()
+                        {
+                            alert("hay un error");
+
+
+                        }
+
+                }
+             }
+         });
+      }
+</script>
+</body>
+<footer>
+
+
+    <div class="col-12 col-md-12 col-lg-12" style="margin-bottom: 0px;padding-left:30px;padding-right: 30px;margin-top: 10px;">
+
+        <div class="row">
+            <div class="col-md-12 footer">
+                <div class="row">
+                    <div class="col-md-4 col-12 col-lg-4 centrar altura-foo">
+                        <div class="row">
+                            <div class="col-md-12 centrar">
+                                <span class="text-span">TELÉFONOS / WHATS APP:</span>
+                            </div>
+                            <div class="col-md-12 centrar" style="margin-top: 5px;">
+                                <img src="img/call.png" style="width: 25px;height: auto;">&nbsp;<span class="text-span">55.40.52.92.85</span>
+                            </div>
+                            <div class="col-md-12 centrar" style="margin-top: 5px;">
+                                <img src="img/call.png" style="width: 25px;height: auto;">&nbsp;<span class="text-span">55.81.22.71.53</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4 col-12 col-lg-4 altura-foo centrar">
+                        <div class="row">
+
+                            <div class="col-md-12">
+                                <img src="img/logo-gris.png" class="logo-footer">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4 col-12 col-lg-4 altura-foo centrar">
+                        <div class="row">
+                            <div class="col-md-12 centrar">
+                                <span class="text-span">UBICACIÓN:</span>
+                            </div>
+                            <div class="col-md-12 centrar" style="margin-top: 5px;">
+                                <img src="img/ubicacion.png" style="width: 25px;height: auto;">&nbsp;<span class="text-span">Calle Priv. TRIANA MZ41 LT10 N20 Conjnto urbano Real verona C.P. 55767 TECAMAC EDO. DE MEX.</span>
+
+                            </div>
+                            <div class="col-md-12 centrar" style="margin-top: 10px;">
+                                <a href="https://www.google.com/maps/search/priv+triana+mz41+lt+10+n20+c.+treviso+conjunto+urbano+real+verona+c.p+55767+tecama+mex/@19.6519622,-99.0293331,19.25z" onclick="alert('Saldras a la pestaña Maps') ;" target="_blank"><img src="img/maps.png" style="width: 200px;height: auto;cursor: pointer;"></a>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</footer>
+
+
+<!-- end footer -->
+<!-- Javascript files-->
+
+
+
+<!-- sidebar -->
+
+<script src="js/custom.js"></script>
+
+
+</html>
